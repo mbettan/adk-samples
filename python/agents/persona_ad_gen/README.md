@@ -4,7 +4,7 @@ An intelligent agent that transforms your photos into compelling advertising sce
 
 ## Overview
 
-PersonaAd Gen is an ADK-based agent system that creates personalized advertising content by combining user personas with creative image generation. The agent collects detailed customer insights and transforms uploaded images into multiple advertising scenes tailored to specific target audiences.
+PersonaAd Gen is an ADK-based agent that creates personalized advertising content by combining user personas with creative image generation from existing images using Gemini 2.5 Flash Images (Preview). The agent collects detailed customer insights and transforms uploaded images into multiple advertising scenes tailored to specific target audiences.
 
 ### Key Components
 
