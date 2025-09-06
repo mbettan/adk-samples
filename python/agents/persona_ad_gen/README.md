@@ -1,211 +1,435 @@
 # Persona Ad Gen - AI-Powered Advertising Scene Generator
 
-An intelligent agent that transforms your photos into compelling advertising scenes through persona-driven storytelling.
+This project implements an AI-powered advertising content generator that transforms user photos into compelling, persona-driven advertising scenes. The agent guides users through a story-driven brief collection process, automatically generates headlines, and creates multiple advertising scenes tailored to specific target audiences.
 
 ## Overview
 
-PersonaAd Gen is an ADK-based agent that creates personalized advertising content by combining user personas with creative image generation from existing images using Gemini 2.5 Flash Images (Preview). The agent collects detailed customer insights and transforms uploaded images into multiple advertising scenes tailored to specific target audiences.
+The Persona Ad Gen agent is designed to revolutionize advertising content creation by focusing on the human story behind every great ad. Instead of traditional form-filling, it engages users in a conversational journey to understand their ideal customer's problems, desires, and motivations. The agent then leverages this deep understanding to generate visually compelling advertising scenes that resonate with the target audience.
 
-### Key Components
+## Agent Details
 
-- **PersonaAdGenAgent**: Main orchestrator that guides users through a story-driven brief collection process
-- **CreativeAgent**: Sub-agent that generates 4 unique advertising scenes based on the collected persona
-- **Headline Generator**: Automatically creates compelling headlines based on the persona story
+The key features of the Persona Ad Gen agent include:
 
-## Features
+| Feature            | Description                                      |
+| ------------------ | ------------------------------------------------ |
+| _Interaction Type_ | Conversational, Story-driven                    |
+| _Complexity_       | Intermediate                                    |
+| _Agent Type_       | Multi-Agent (Main + Creative Sub-agent)         |
+| _Components_       | Tools, Image Generation, Multimodal             |
+| _Vertical_         | Marketing/Advertising                            |
 
-✨ **Story-Driven Brief Collection**: Instead of traditional forms, build your ad's narrative step-by-step  
-🎯 **Persona-Focused**: Centers on understanding your ideal customer's problems and desires  
-🖼️ **Multi-Scene Generation**: Creates 4 distinct advertising scenes from a single uploaded image  
-📝 **Automatic Headline Creation**: Generates compelling headlines based on your story  
-💾 **Artifact Management**: Saves all generated content for easy access and download
+### Agent Architecture
 
-## Prerequisites
+The agent is built using a multi-agent architecture with specialized components:
 
-- Python 3.9 or higher
-- Poetry or pip for dependency management
-- Google Cloud Project (for Vertex AI) or Google AI Studio API key
-- GCS bucket for artifact storage
+1. **PersonaAdGenAgent (Main Orchestrator)**
+   - Guides users through the 5-section story collection process
+   - Manages session state and workflow progression
+   - Coordinates with sub-agents for specialized tasks
 
-## Installation
+2. **CreativeAgent (Sub-agent)**
+   - Generates 4 unique advertising scenes based on the persona brief
+   - Utilizes Gemini's image generation capabilities
+   - Creates scene-specific prompts optimized for visual impact
 
-```bash
-# Install dependencies using Poetry
-poetry install
+3. **Headline Generation System**
+   - Automatically creates compelling headlines after brief collection
+   - Generates multiple options based on persona, message, and tone
+   - Integrates seamlessly into the workflow without user intervention
 
-# Or using pip
-pip install google-adk google-genai pydantic python-dotenv google-cloud-aiplatform
+### Workflow Stages
 
-# For evaluation capabilities, install with eval extras
-pip install "google-adk[eval]"
+1. **The Ideal Customer (Persona)** - Understanding the target audience's problems and desires
+2. **The 'Aha!' Moment (Core Message)** - Defining the solution in one powerful sentence
+3. **The Conversation (Tone of Voice)** - Selecting the appropriate communication style
+4. **The Creative Toolbox (Assets & Copy)** - Uploading base images and generating headlines
+5. **The Targeting Signals (Audience Foundation)** - Collecting demographic and interest data
 
-# If using pipx for ADK installation, inject eval dependencies
-pipx inject google-adk pandas tabulate rouge-score
-```
+### Key Features
 
-## Configuration
+- **Story-Driven Brief Collection:**
+  - Conversational approach to gathering advertising requirements
+  - Focus on understanding customer problems rather than product features
+  - Progressive disclosure of information needs
 
-### Environment Variables (.env)
+- **Automatic Headline Generation:**
+  - Creates compelling headlines based on the collected persona story
+  - Multiple variations to choose from
+  - Tone-matched to the target audience
 
-Create a `.env` file in the project root with the following variables:
+- **Multi-Scene Image Generation:**
+  - Transforms uploaded images into 4 distinct advertising scenes
+  - Each scene tells a different aspect of the brand story
+  - Optimized for various marketing channels
 
-```bash
-# Google Cloud Project Configuration
-export GOOGLE_CLOUD_PROJECT=your-project-id
-export GOOGLE_CLOUD_LOCATION=global
+- **Session State Management:**
+  - Maintains context throughout the conversation
+  - Stores brief details, images, and generated content
+  - Enables seamless workflow progression
 
-# Artifact Storage Configuration
-export ADK_ARTIFACT_SERVICE_TYPE=GCS
-export ADK_GCS_BUCKET_NAME=your-bucket-name
-
-# Vertex AI Configuration (optional)
-export GOOGLE_GENAI_USE_VERTEXAI=true
-```
-
-**Note**: 
-- Replace `your-project-id` with your actual Google Cloud project ID
-- Replace `your-bucket-name` with your GCS bucket for storing artifacts
-- Set `GOOGLE_GENAI_USE_VERTEXAI=true` if using Vertex AI instead of direct Gemini API
-
-## Usage
-
-### Running the Agent
-
-1. **Start the agent using ADK Web**:
-```bash
-adk web
-```
-
-2. **Alternative method** (if using the run script):
-```bash
-./run_agent.sh
-```
-
-3. **Direct Python execution**:
-```bash
-python -m adk.web_server --app persona_ad_gen
-```
-
-2. Follow the workflow:
-   - Provide the 6 brief items when prompted:
-     - Brand name
-     - Product name  
-     - Target location
-     - Target age group
-     - Target gender
-     - Target interests
-   - Upload a base image when requested
-   - Confirm the brief details
-   - The agent will generate 4 creative scenes
-
-## Testing & Evaluation
-
-### Running Evaluations
-
-The project includes evaluation datasets to test the agent's responses:
-
-```bash
-# Run evaluation tests
-adk eval persona_ad_gen eval/data/persona_ad_gen_evalset.test.json
-
-# Run unit tests
-pytest eval/test_eval.py
-```
-
-### Evaluation Setup
-
-If you encounter issues with evaluation, ensure you have the required dependencies:
-
-1. **For pip installations**:
-```bash
-pip install "google-adk[eval]"
-```
-
-2. **For pipx installations**:
-```bash
-pipx inject google-adk pandas tabulate rouge-score
-```
-
-The evaluation tests verify that the agent provides the correct introduction and follows the expected conversation flow.
-
-## Workflow
-
-1. **Brief Collection**: The main agent collects all necessary information
-2. **Image Upload**: User uploads a base image that serves as the foundation
-3. **Confirmation**: Agent confirms all details with the user
-4. **Scene Generation**: Creative sub-agent creates a 4-scene plan
-5. **Image Creation**: Each scene is generated as a new image variation
-
-## Technical Details
+- **Artifact Management:**
+  - Saves all generated images as downloadable artifacts
+  - Organized naming convention for easy identification
+  - Integration with Google Cloud Storage for persistence
 
 ### Tools
 
-- `confirm_and_save_brief`: Saves the creative brief to session state
-- `save_image_as_artifact`: Processes and saves uploaded images
-- `edit_scene_image`: Generates new images based on edit prompts using the uploaded image as source
+The agent has access to the following tools:
 
-### Models
+- `create_persona_brief_without_headlines(persona: str, core_message: str, tone: str, location: str, demographics: str, interests: str) -> dict`: Creates the initial persona brief structure before headline generation.
 
-- Uses `gemini-2.5-flash-image-preview` for image generation with source image input
-- Supports image-to-image editing and text-to-image generation
-- Configured with `response_modalities=["TEXT", "IMAGE"]` for both text descriptions and image outputs
+- `generate_headlines(persona: str, core_message: str, tone: str) -> list[str]`: Automatically generates compelling headlines based on the persona story.
 
-### Session State
+- `save_image_as_artifact(image_data: str) -> str`: Processes and saves uploaded images as artifacts for scene generation.
 
-The agent maintains session state with:
-- `confirmed_brief`: The complete creative brief details
-- `base_image_filename`: Reference to the uploaded base image
+- `confirm_and_save_persona_brief(brief: dict) -> str`: Saves the complete creative brief to session state.
 
-### Viewing Generated Images
+- `edit_scene_image(base_image: str, scene_prompt: str, scene_number: int) -> str`: Generates new advertising scenes based on edit prompts using the uploaded image as source.
 
-Generated images are saved as artifacts and can be accessed through:
-1. **ADK Web Interface**: Navigate to the artifacts section in your session
-2. **Session Artifacts**: Look for files named like:
-   - `scene_1_nyc_power_stance.png`
-   - `scene_2_dynamic_city_drive.png`
-   - `scene_3_athlete_companion.png`
-   - `scene_4_command_the_city.png`
-3. **API Response**: Each generation returns the artifact filename for programmatic access
+- `debug_save_image(image_data: str, filename: str) -> str`: Debug utility for image processing and storage operations.
 
-### Image Generation Process
+## Setup and Installation
 
-The agent follows this workflow:
-1. Loads your uploaded image as the source material
-2. Combines it with scene-specific editing prompts
-3. Sends both to Gemini 2.5 Flash Image model
-4. Processes the response to extract generated images
-5. Saves results as downloadable artifacts
+### Prerequisites
 
-## Error Handling
+- Python 3.9+
+- Poetry (for dependency management)
+- Google ADK SDK
+- Google Cloud Project (for Vertex AI integration) or Google AI Studio API key
+- GCS bucket for artifact storage
 
-The agent handles:
-- Missing image uploads
-- Failed image generation attempts
-- Invalid brief information
-- API errors with graceful fallbacks
+### Installation
 
-## Development
+1. **Prerequisites:**
 
-To modify the agent:
+   For the Agent Engine deployment steps, you will need a Google Cloud Project. Once you have created your project, [install the Google Cloud SDK](https://cloud.google.com/sdk/docs/install). Then run the following command to authenticate with your project:
+   ```bash
+   gcloud auth login
+   ```
+   
+   You also need to enable certain APIs. Run the following command to enable the required APIs:
+   ```bash
+   gcloud services enable aiplatform.googleapis.com storage.googleapis.com
+   ```
 
-1. Edit tool functions in `tools.py`
-2. Adjust agent behavior in `agent.py` or `sub_agents/creative_agent.py`
-3. Update models in `models.py` if needed
-4. Test with `adk web`
-5. Run evaluations with `adk eval` to verify changes
+2. Clone the repository:
 
-## Dependencies
+   ```bash
+   git clone https://github.com/google/adk-samples.git
+   cd adk-samples/python/agents/persona_ad_gen
+   ```
 
-- `google-adk`: Agent Development Kit
-- `google-genai`: Gemini AI API client
-- `pydantic`: Data validation
-- `google-cloud-aiplatform`: Cloud AI platform integration
-- `python-dotenv`: Environment variable management
+   For the rest of this tutorial **ensure you remain in the `agents/persona_ad_gen` directory**.
 
-### Evaluation Dependencies (optional)
-- `pandas`: Data manipulation for evaluation metrics
-- `tabulate`: Formatted output for evaluation results
-- `rouge-score`: Text similarity metrics for evaluation
+3. Install dependencies using Poetry:
+
+   If you have not installed poetry before then run `pip install poetry` first. Then you can create your virtual environment and install all dependencies using:
+
+   **Note for Linux users:** If you get an error related to `keyring` during the installation, you can disable it by running the following command:
+   ```bash
+   poetry config keyring.enabled false
+   ```
+   This is a one-time setup.
+
+   ```bash
+   poetry install
+   ```
+
+   To activate the virtual environment run:
+   ```bash
+   poetry env activate
+   ```
+
+4. Install evaluation dependencies (optional):
+
+   For running evaluation tests, you need additional dependencies:
+   ```bash
+   pip install "google-adk[eval]"
+   
+   # If using pipx for ADK installation
+   pipx inject google-adk pandas tabulate rouge-score
+   ```
+
+5. Set up environment variables:
+
+   Create a `.env` file in the project root with the following variables:
+   ```bash
+   # Google Cloud Project Configuration (global is must have for Gemini 2.5 Flash Images)
+   export GOOGLE_CLOUD_PROJECT=your-project-id
+   export GOOGLE_CLOUD_LOCATION=global
+   
+   # Artifact Storage Configuration
+   export ADK_ARTIFACT_SERVICE_TYPE=GCS
+   export ADK_GCS_BUCKET_NAME=your-bucket-name
+   
+   # For Vertex AI (set to true if using Vertex AI)
+   export GOOGLE_GENAI_USE_VERTEXAI=true
+   
+   # For Google AI Studio (if not using Vertex AI)
+   # export GOOGLE_GENAI_USE_VERTEXAI=false
+   # export GOOGLE_API_KEY=your-api-key
+   ```
+
+## Running the Agent
+
+You can run the agent using the ADK command in your terminal from the root project directory:
+
+1. Run agent in CLI:
+
+   ```bash
+   adk run persona_ad_gen
+   ```
+
+2. Run agent with ADK Web UI:
+
+   ```bash
+   adk web
+   ```
+   
+   The web interface will be available at the URL printed in the console (typically http://localhost:5000)
+
+3. Alternative execution methods:
+
+   ```bash
+   # Using the run script (if available)
+   ./run_agent.sh
+   
+   # Direct Python execution
+   python -m adk.web_server --app persona_ad_gen
+   ```
+
+### Example Interaction
+
+Here's a typical interaction flow with the agent:
+
+**User:**
+hello
+
+**Agent:**
+Great ads connect with a real person by solving a real problem. Instead of just filling out a form, we're going to build your ad's story step-by-step. First, let's get to know your ideal customer.
+
+Describe the single person you want to reach. What is a key problem, need, or desire they are currently facing that your business can help with?
+
+**User:**
+I want to reach busy professionals in their 30s who struggle to find time for fitness but want to stay healthy and look good.
+
+**Agent:**
+Perfect! You're targeting busy professionals who value their health but struggle with time management. Now, let's capture the core message.
+
+Now, imagine that person sees your ad. In one powerful sentence, what is the solution or key takeaway you want them to have? This is the core message that will form the heart of your ad.
+
+**User:**
+"Get fit in just 20 minutes a day with workouts that fit your schedule, not the other way around."
+
+**Agent:**
+Excellent core message! It directly addresses their time constraint while promising results. Now let's think about the tone.
+
+How should we speak to this person? Choose a Tone of Voice that would resonate with them (e.g., Professional, Empathetic, Witty, Urgent, Conversational, Inspiring).
+
+**User:**
+Inspiring and empathetic - understanding their struggle but motivating them to take action.
+
+**Agent:**
+Perfect tone choice! Inspiring and empathetic will resonate well with busy professionals who need both understanding and motivation.
+
+You've defined the story, now let's gather the materials. Upload your most compelling image that will serve as the foundation for your advertising scenes.
+
+[User uploads image]
+
+**Agent:**
+Perfect! Now I'll automatically generate compelling headlines for you based on your story.
+
+```tool_code
+generate_headlines(
+    persona="busy professionals in their 30s struggling with time for fitness",
+    core_message="Get fit in just 20 minutes a day with workouts that fit your schedule",
+    tone="Inspiring and empathetic"
+)
+```
+
+```tool_outputs
+[
+    "Your Schedule. Your Workout. Your Success.",
+    "20 Minutes to Transform: Fitness That Fits Your Life",
+    "Busy Schedule? We Get It. 20 Minutes Is All You Need.",
+    "From Boardroom to Better Health in 20 Minutes",
+    "Finally, Fitness That Respects Your Time"
+]
+```
+
+## Evaluating the Agent
+
+Evaluation tests assess the agent's conversation flow and response accuracy.
+
+**Steps:**
+
+1. **Run Evaluation Tests:**
+
+   ```bash
+   adk eval persona_ad_gen eval/data/persona_ad_gen_evalset.test.json
+   ```
+
+   Expected output:
+   ```
+   Eval Run Summary
+   persona_ad_gen_evalset:
+     Tests passed: 2
+     Tests failed: 0
+   ```
+
+2. **Run Unit Tests:**
+
+   ```bash
+   pytest eval/test_eval.py
+   ```
+
+   This runs specific test cases including:
+   - `test_agent_introduction` - Verifies the agent provides the correct introduction
+
+## Configuration
+
+### Model Configuration
+
+The agent uses the following models:
+- **Main Agent:** `gemini-2.5-flash` for conversation and reasoning
+- **Image Generation:** `gemini-2.5-flash-image-preview` for creating advertising scenes
+
+You can modify these in `persona_ad_gen/agent.py`:
+
+```python
+MODEL = "gemini-2.5-flash"  # Change this to use a different model (e.g., Gemini 2.5 Pro)
+```
+
+### Session State Structure
+
+The agent maintains the following session state:
+
+```python
+{
+    "confirmed_brief": {
+        "persona": str,
+        "core_message": str,
+        "tone": str,
+        "location": str,
+        "demographics": str,
+        "interests": str
+    },
+    "base_image_filename": str,
+    "headlines": list[str],
+    "generated_scenes": list[str]
+}
+```
+
+## Deployment on Google Agent Engine
+
+To deploy the agent to Vertex AI Agent Engine:
+
+1. **Install deployment dependencies:**
+
+   ```bash
+   poetry install --with deployment
+   ```
+
+2. **Deploy the agent:**
+
+   ```bash
+   python deployment/deploy.py --create
+   ```
+
+3. **List deployed agents:**
+
+   ```bash
+   python deployment/deploy.py --list
+   ```
+
+4. **Delete a deployment:**
+
+   ```bash
+   python deployment/deploy.py --delete --resource_id=AGENT_ENGINE_ID
+   ```
+
+### Testing Deployment
+
+This code snippet shows how to test the deployed agent:
+
+```python
+import dotenv
+from vertexai import agent_engines
+
+# Load environment variables
+dotenv.load_dotenv()
+
+# Initialize connection to deployed agent
+agent_engine_id = "YOUR_AGENT_ENGINE_ID"  # Replace with actual ID
+agent_engine = agent_engines.get(agent_engine_id)
+
+# Create a new session
+session = agent_engine.create_session(user_id="test_user")
+
+# Stream interaction with the agent
+for event in agent_engine.stream_query(
+    user_id=session["user_id"],
+    session_id=session["id"],
+    message="Hello, I need help creating an ad campaign"
+):
+    for part in event["content"]["parts"]:
+        print(part["text"])
+```
+
+## Project Structure
+
+```
+persona_ad_gen/
+├── __init__.py
+├── agent.py                    # Main agent definition and orchestration
+├── tools.py                    # Core tool implementations
+├── advanced_tools.py           # Extended tool functions
+├── models.py                   # Pydantic data models
+├── advanced_models.py          # Extended data structures
+├── debug_image_handler.py      # Image processing utilities
+└── sub_agents/
+    ├── __init__.py
+    ├── creative_agent.py       # Scene generation sub-agent
+    └── headline_agent.py       # Headline generation logic
+
+eval/
+├── test_eval.py               # Unit tests for agent behavior
+└── data/
+    └── persona_ad_gen_evalset.test.json  # Evaluation test cases
+```
+
+## Troubleshooting
+
+### Common Issues and Solutions
+
+1. **Evaluation module not found:**
+   ```bash
+   # Solution: Install eval dependencies
+   pipx inject google-adk pandas tabulate rouge-score
+   ```
+
+2. **Authentication errors:**
+   ```bash
+   # Solution: Authenticate with Google Cloud
+   gcloud auth application-default login
+   ```
+
+3. **Image generation failures:**
+   - Verify that `GOOGLE_GENAI_USE_VERTEXAI` is correctly set
+   - Check API quotas and limits in your Google Cloud project
+   - Ensure the model `gemini-2.5-flash-image-preview` is available in your region
+
+4. **Missing environment variables:**
+   - Ensure all required variables are set in your `.env` file
+   - Verify the GCS bucket exists and you have write permissions
+
+## Disclaimer
+
+This agent sample is provided for illustrative purposes only and is not intended for production use. It serves as a basic example of an agent and a foundational starting point for individuals or teams to develop their own agents.
+
+This sample has not been rigorously tested, may contain bugs or limitations, and does not include features or optimizations typically required for a production environment (e.g., robust error handling, security measures, scalability, performance considerations, comprehensive logging, or advanced configuration options).
+
+Users are solely responsible for any further development, testing, security hardening, and deployment of agents based on this sample. We recommend thorough review, testing, and the implementation of appropriate safeguards before using any derived agent in a live or critical system.
 
 ## License
 
